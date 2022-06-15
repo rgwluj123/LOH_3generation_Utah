@@ -33,3 +33,22 @@ ggplot(loh_count, aes(x = reorder(V6, -n), y = n)) +
         panel.grid.major.x = element_line(size = 0.4, colour = "gray80"),
         panel.grid.minor.x = element_line(size = 0.15, colour = "gray80"))
 
+
+#######FIGURE 2A#######
+library(ggplot2)
+library(dplyr)
+library(ggpubr)
+library(ggExtra)
+setwd("~/Desktop/loh_paper/from_220301/corr_age/")
+loh_age <- read.table("~/Desktop/loh_paper/from_220301/identified_iloh/allfam_phasing_loh_onlypm_nowhatdnv_v5_v16_range_reshaped_v10_isnv_updown_iloh_samid_header.txt"
+                      , header = T)
+
+ge12 <- read.csv("~/Desktop/loh_paper/from_220301/raw_data/age_info/second_gen.dnms.summary.csv", header = T)
+
+ge12_edit <- ge12[, c(5,10,11,12,19,21)]
+names(ge12_edit) <- c("d1_age", "fam", "m1_id", "m1_age", "d1_id", "ge2_id")
+
+loh_aged <- loh_age %>% 
+  left_join(ge12_edit,
+            by = c('sam_id'='ge2_id'))
+
