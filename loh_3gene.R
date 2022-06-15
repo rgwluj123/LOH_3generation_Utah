@@ -101,9 +101,9 @@ library(dplyr)
 library(ggpubr)
 library(ggExtra)
 
-setwd("~/Desktop/loh_paper/from_220301/loh_origin/")
-loh <- read.table("~/Desktop/loh_paper/from_220301/identified_iloh/allfam_phasing_loh_onlypm_nowhatdnv_v5_v16_range_reshaped_v10_isnv_updown_iloh_samid.txt")
-ori <- read.table("~/Desktop/loh_paper/from_220301/loh_origin/allfam_phasing_loh_onlypm_nowhatdnv_v5_v16_range_reshaped_d2m2_v10_isnvori.txt")
+setwd("SET YOUR WORKING DIRECTORY")
+loh <- read.table("raw_identified_all_loh.txt")
+ori <- read.table("raw_identified_all_origin_of_loh.txt")
 
 names(loh) <- c("chrm", "start", "end", "fam", "sex", "ge2_id", "het", "isnv", "isnv_count", "min_length", "max_length")
 names(ori) <- c("chrm","start", "end", "ref", "alt", "fam", "sex", "loh_info", "ori" )
@@ -111,10 +111,8 @@ names(ori) <- c("chrm","start", "end", "ref", "alt", "fam", "sex", "loh_info", "
 loh_ori <- loh %>%
   left_join(ori, by = c("chrm", "start", "fam", "sex"))
 
-write.table(loh_ori, "~/Desktop/loh_paper/from_220301/loh_origin/allfam_phasing_loh_onlypm_nowhatdnv_v5_v16_range_reshaped_v10_isnv_updown_iloh_samid_header_aged_ori.txt", 
-            quote = F, sep = "\t", row.names = F)
 
-loh_ori_donor <- read.table("~/Desktop/loh_paper/from_220301/loh_origin/allfam_phasing_loh_onlypm_nowhatdnv_v5_v16_range_reshaped_v10_isnv_updown_iloh_samid_header_aged_ori_edit_uniq_donor.txt") 
+loh_ori_donor <- read.table("raw_identified_all_origin_of_loh.txt REARRANGED BY "donor"") 
 
 loh_ori_edit_count_donor <- loh_ori_donor %>% 
   group_by(V6,V16) %>% 
