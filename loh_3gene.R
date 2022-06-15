@@ -1,7 +1,4 @@
 
-
-
-
 #######FIGURE 1B#######
 library(ggplot2)
 library(dplyr)
@@ -183,7 +180,7 @@ library(ggpubr)
 library(ggExtra)
 
 setwd("SET YOUR WORKING DIRECTORY")
-loh_gc <- read.table("raw_gc_content_of_all_loh_in_1kbin.txt")
+loh_gc <- read.table("raw_gc_content_of_all_loh_in_1kbin.txt") #The file size is over 100MB, so we can't upload at GitHub. The file is available on request.
 
 loh_gc$V4 <- round(loh_gc$V4, 2)
 loh_gc_more100 <- subset(loh_gc, V5 >= 100)
@@ -239,7 +236,7 @@ library(reshape2)
 library(ggrepel)
 
 setwd("SET YOUR WORKING DIRECTORY")
-loh_terri <- read.table("allfam_phasing_loh_onlypm_nowhatdnv_v5_v16_range_reshaped_v10_isnv_updown_iloh_samid_sorted_iloh_len_by_chrom.bed")
+loh_terri <- read.table("raw_identified_all_loh.txt MEARGED AND SORTED BY sample_id AND chr")
 loh_terri_melt <- melt(data=loh_terri, id.vars=1:4)
 names(loh_terri) <- c("sam_id", "chr", "loh_count", "loh_len", "count_per", "len_per")
 loh_terri_mean <- loh_terri %>% 
@@ -251,7 +248,7 @@ ggplot(terri_gene_dens, aes(x = avg, y = dens)) +
   geom_point() +
   geom_text_repel(aes(label = chr),size = 3)
                         
-gene_dens <- read.table("~/Desktop/loh_paper/from_211201/chr_territory/gencode.v19.annotation_protein_coding_gene_noLCR_norepeat_uniq_count_gene_per_1M.txt")
+gene_dens <- read.table("Gene annotation of the GENCODE project (GRCh37.p13)")
 names(gene_dens) <- c("chr", "dens")
 
 terri_gene_dens <- loh_terri_mean %>% 
