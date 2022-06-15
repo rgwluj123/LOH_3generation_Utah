@@ -38,11 +38,10 @@ library(ggplot2)
 library(dplyr)
 library(ggpubr)
 library(ggExtra)
-setwd("~/Desktop/loh_paper/from_220301/corr_age/")
-loh_age <- read.table("~/Desktop/loh_paper/from_220301/identified_iloh/allfam_phasing_loh_onlypm_nowhatdnv_v5_v16_range_reshaped_v10_isnv_updown_iloh_samid_header.txt"
-                      , header = T)
+setwd("SET YOUR WORKING DIRECTORY")
+loh_age <- read.table("raw_identified_all_loh.txt, header = T)
 
-ge12 <- read.csv("~/Desktop/loh_paper/from_220301/raw_data/age_info/second_gen.dnms.summary.csv", header = T)
+ge12 <- read.csv("second_gen.dnms.summary.csv", header = T) #YOU CAN GET THE "second_gen.dnms.summary.csv" from GitHub of Sasani, 2019
 
 ge12_edit <- ge12[, c(5,10,11,12,19,21)]
 names(ge12_edit) <- c("d1_age", "fam", "m1_id", "m1_age", "d1_id", "ge2_id")
