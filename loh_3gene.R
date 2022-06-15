@@ -182,8 +182,8 @@ library(dplyr)
 library(ggpubr)
 library(ggExtra)
 
-setwd("~/Desktop/loh_paper/from_220301/gc_content/")
-loh_gc <- read.table("allfam_phasing_loh_onlypm_nowhatdnv_v5_v16_range_reshaped_v10_isnv_updown_iloh_samid_sorted_iloh.txt")
+setwd("SET YOUR WORKING DIRECTORY")
+loh_gc <- read.table("raw_gc_content_of_all_loh_in_1kbin.txt")
 
 loh_gc$V4 <- round(loh_gc$V4, 2)
 loh_gc_more100 <- subset(loh_gc, V5 >= 100)
@@ -238,20 +238,13 @@ library(ggExtra)
 library(reshape2)
 library(ggrepel)
 
-setwd("~/Desktop/loh_paper/from_220301/chr_territory/")
+setwd("SET YOUR WORKING DIRECTORY")
 loh_terri <- read.table("allfam_phasing_loh_onlypm_nowhatdnv_v5_v16_range_reshaped_v10_isnv_updown_iloh_samid_sorted_iloh_len_by_chrom.bed")
 loh_terri_melt <- melt(data=loh_terri, id.vars=1:4)
 names(loh_terri) <- c("sam_id", "chr", "loh_count", "loh_len", "count_per", "len_per")
 loh_terri_mean <- loh_terri %>% 
   group_by(chr) %>% 
   summarise(avg = mean(count_per), med = median(count_per))
-
-
-gene_dens <- read.table("~/Desktop/loh_paper/from_211201/chr_territory/gencode.v19.annotation_protein_coding_gene_noLCR_norepeat_uniq_count_gene_per.txt")
-names(gene_dens) <- c("chr", "dens")
-
-terri_gene_dens <- loh_terri_mean %>% 
-  full_join(gene_dens, by = c("chr"))
 
 library(ggrepel)
 ggplot(terri_gene_dens, aes(x = avg, y = dens)) +
