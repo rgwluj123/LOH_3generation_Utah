@@ -8,8 +8,8 @@ library(dplyr)
 library(ggpubr)
 library(ggExtra)
 
-setwd("~/Desktop/loh_paper/from_220301/num_of_loh")
-loh <- read.table("~/Desktop/loh_paper/from_220301/identified_iloh/allfam_phasing_loh_onlypm_nowhatdnv_v5_v16_range_reshaped_v10_isnv_updown_iloh_samid.txt")
+setwd("SET YOUR WORKING DIRECTORY")
+loh <- read.table("raw_identified_all_loh.txt")
 loh_count <- loh %>% 
   group_by(V6) %>% 
   summarise(n=n())
