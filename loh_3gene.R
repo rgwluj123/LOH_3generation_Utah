@@ -180,3 +180,104 @@ ggplot(loh_case_edit_count_reorder_xmax, aes(x = n_mod, y = reorder(V6, -n), fil
 
 
 #######FIGURE 4A#######
+library(ggplot2)
+library(dplyr)
+library(ggpubr)
+library(ggExtra)
+
+setwd("~/Desktop/loh_paper/from_220301/gc_content/")
+loh_gc <- read.table("allfam_phasing_loh_onlypm_nowhatdnv_v5_v16_range_reshaped_v10_isnv_updown_iloh_samid_sorted_iloh.txt")
+
+loh_gc$V4 <- round(loh_gc$V4, 2)
+loh_gc_more100 <- subset(loh_gc, V5 >= 100)
+
+loh_gc_more100$grade <- cut(loh_gc_more100$V4, breaks = c(0,0.05,0.1,0.15,0.2,0.25,0.3,
+                                                          0.35,0.4,0.45,0.5,0.55,0.6,
+                                                          0.65,0.7,0.75,0.8,0.85,0.9,0.95,1))
+
+
+loh_gc_more100_count <- loh_gc_more100 %>% 
+  group_by(grade) %>% 
+  summarise(n=n())
+
+loh_gc_more100_count_freq <- loh_gc_more100_count %>% 
+  mutate(freq_bin = n/sum(n))
+
+loh_gc_more100_count_loh <- aggregate(loh_gc_more100$V6,
+                                      by=list(grade=loh_gc_more100$grade), FUN=sum)
+
+
+loh_gc_more100_count_loh_freq <- loh_gc_more100_count_loh %>% 
+  mutate(freq = x/sum(x))
+  
+loh_join <- loh_gc_more100_count_freq %>% 
+  full_join(loh_gc_more100_count_loh_freq, by = c("grade"))
+
+loh_join_freq <- mutate(loh_join, obs_exp = freq/freq_bin)
+
+loh_join_freq_subset <- subset(loh_join_freq, obs_exp > 0)
+
+loh_join_freq_subset_edit <- loh_join_freq_subset %>% 
+  mutate(ratio = ifelse(obs_exp < 1 , -obs_exp, obs_exp))
+
+loh_join_freq_subset_edit_edit <- loh_join_freq_subset_edit %>% 
+  mutate(ratio_munusone = ratio - 1)
+loh_join_freq_subset_edit_edit[, "grade_edit"] <- c(25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75)
+
+ ggplot(loh_join_freq_subset_edit_edit, aes(x = grade, y = obs_exp - base )) +
+     geom_bar(stat = "identity") +
+     scale_y_continuous(breaks = c(-1, -1.75, -1.5, -1.25, -1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75,1  ), labels = function(obs_exp) obs_exp + base) +
+     coord_cartesian(ylim = c(-1, 1)) +
+     theme_minimal() +
+     theme(axis.text.y = element_text(size= 14),
+             axis.text.x = element_text(size = 14,angle = 40, hjust = 1))
+   
+       
+#######FIGURE 4B#######
+library(ggplot2)
+library(dplyr)
+library(ggpubr)
+library(ggExtra)
+library(reshape2)
+library(ggrepel)
+
+setwd("~/Desktop/loh_paper/from_220301/chr_territory/")
+loh_terri <- read.table("allfam_phasing_loh_onlypm_nowhatdnv_v5_v16_range_reshaped_v10_isnv_updown_iloh_samid_sorted_iloh_len_by_chrom.bed")
+loh_terri_melt <- melt(data=loh_terri, id.vars=1:4)
+names(loh_terri) <- c("sam_id", "chr", "loh_count", "loh_len", "count_per", "len_per")
+loh_terri_mean <- loh_terri %>% 
+  group_by(chr) %>% 
+  summarise(avg = mean(count_per), med = median(count_per))
+
+
+gene_dens <- read.table("~/Desktop/loh_paper/from_211201/chr_territory/gencode.v19.annotation_protein_coding_gene_noLCR_norepeat_uniq_count_gene_per.txt")
+names(gene_dens) <- c("chr", "dens")
+
+terri_gene_dens <- loh_terri_mean %>% 
+  full_join(gene_dens, by = c("chr"))
+
+library(ggrepel)
+ggplot(terri_gene_dens, aes(x = avg, y = dens)) +
+  geom_point() +
+  geom_text_repel(aes(label = chr),size = 3)
+                        
+gene_dens <- read.table("~/Desktop/loh_paper/from_211201/chr_territory/gencode.v19.annotation_protein_coding_gene_noLCR_norepeat_uniq_count_gene_per_1M.txt")
+names(gene_dens) <- c("chr", "dens")
+
+terri_gene_dens <- loh_terri_mean %>% 
+  full_join(gene_dens, by = c("chr"))
+
+ggplot(terri_gene_dens, aes(x = avg, y = dens)) +
+  geom_point(color = "red", size = 2.5) +
+  geom_text_repel(aes(label = chr),size = 5.5) +
+  scale_y_continuous(breaks = c(0,10, 20, 30, 40, 50, 60, 70, 80)) +
+  scale_x_continuous(breaks = c(0.02, 0.04, 0.06, 0.08, 0.10, 0.12)) +
+  coord_cartesian(ylim = c(0,80), xlim = c(0.01, 0.12)) +
+  theme_minimal() + 
+  theme(axis.text.y = element_text(size= 16),
+        axis.text.x = element_text(size = 16))
+                        
+                        
+                      
+                        
+                      
