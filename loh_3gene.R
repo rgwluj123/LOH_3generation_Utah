@@ -134,8 +134,8 @@ library(dplyr)
 library(ggpubr)
 library(ggExtra)
 
-setwd("~/Desktop/loh_paper/from_220301/germ_somatic/")
-loh_case <- read.table("allfam_phasing_loh_onlypm_nowhatdnv_v5_v16_range_reshaped_v10_isnv_updown_iloh_samid_sorted_intersect_extract_v2_filtering_trimmed_case.txt")
+setwd("SET YOUR WORKING DIRECTORY")
+loh_case <- read.table("raw_identified_all_loh_with_gene_mosaicism.txt")
 loh_case_edit <- loh_case[, c(1,2,3,6,12)]
 
 loh_case_edit$V12 <- gsub("^case1$", "case13", loh_case_edit$V12)
